@@ -1,0 +1,32 @@
+{
+  "name": "badwords-filter",
+  "version": "0.0.1",
+  "description": "An easy to use badwords filter with advanced detection and anti-workaround",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3chospirits/badwords-filter.git"
+  },
+  "keywords": [
+    "badwords",
+    "filter",
+    "cursewords",
+    "cleaner",
+    "detection",
+    "clean",
+    "dirty",
+    "words",
+    "moderation",
+    "automod",
+    "automoderation"
+  ],
+  "author": "3chospirits",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/3chospirits/badwords-filter/issues"
+  },
+  "homepage": "https://github.com/3chospirits/badwords-filter#readme"
+}
