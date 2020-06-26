@@ -1,6 +1,6 @@
 {
   "name": "badwords-filter",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "An easy to use badwords filter with advanced detection and anti-workaround",
   "main": "index.js",
   "scripts": {

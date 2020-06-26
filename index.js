@@ -1,14 +1,15 @@
 class Filter {
 	/**
 	 * Constructs filter 
-	 * @param {Array} list option to insert your own array of bad words
 	 * @param {Object} config options for the filter
+	 * @param {Array} config.list
 	 * @param {String} config.cleanWith a character to replace bad words with [default: '*']
-	 * @param {number} config.strictness 0: high, 1: medium, 2:low [default: 1]
-	 * @param {boolean} config.useRegex true for enabling regex filtering, false for exact dictionary match *WARNING: large amounts of regex is much slower* [defailt: false]
+	 * @param {Number} config.strictness 0: high, 1: medium, 2:low [default: 1]
+	 * @param {Boolean} config.useRegex true for enabling regex filtering, false for exact dictionary match *WARNING: large amounts of regex is much slower* [defailt: false]
 	 */
-	constructor(list, config) {
-		if (!list) list = require("./filtersets/en.json").filter;
+	constructor(config) {
+		let list = config?config.list:undefined;
+		if (!list) list = require("./filtersets/en.json").filter; //user default list
 		this.useRegex = config ? config.useRegex : false;
 		if (this.useRegex) {
 			this.filter = new Set(
@@ -53,7 +54,7 @@ class Filter {
 		string = string
 			.toLowerCase()
 			.normalize("NFD")
-			.replace(/[\u0300-\u036f]/g, ""); //removes accented characters
+			.replace(/[\u0300-\u036f]/g, ""); //replaces accented characters
 		this.replacements.forEach((replWith, targ) => (string = string.replace(targ, replWith)));
 		return string.replace(/[^a-zA-Z\s]/g, ""); //removes non-alphabetical characters
 	}
@@ -81,7 +82,9 @@ class Filter {
 		console.log(`Normalized:\n\t${this.normalize(string)}`);
 		console.log(`isUnclean:\n\t${this.isUnclean(string)}`);
 		console.log(`uncleanWordIndexes:\n\t${this.getUncleanWordIndexes(string)}`);
-    }
+		console.log(`cleaned:\n\t${this.clean(string)}`);
+		console.log(`getCombos:\n\t${this.getAllCombos(string)}`);
+	}
     /**
      * gets all the indexes of words that are filtered
      * @param {String} string message to check
@@ -104,8 +107,9 @@ class Filter {
 	isUnclean(string) {
 		let arr = this.getAllCombos(this.normalize(string));
 		for (let i = 0; i < arr.length; i++) 
-			for (let j = 0; j < arr[i].length; j++) 
+			for (let j = 0; j < arr[i].length; j++)
 				if (this.isWordUnclean(arr[i][j])) return true;
+				
 		return false;
     }
     /**
@@ -115,10 +119,11 @@ class Filter {
      */
 	isWordUnclean(word) {
 		if (this.useRegex) {
+			let detected = false;
 			this.filter.forEach((r) => {
-				if (r.test(word)) return true;
+				if (r.test(word)) detected = true;
             });
-            return false;
+            return detected;
         }
         else
             return this.filter.has(word);
