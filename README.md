@@ -1,3 +1,9 @@
+[![npm](https://img.shields.io/npm/v/badwords-filter.svg)](https://www.npmjs.com/package/badwords-filter/)
+[![npm](https://img.shields.io/npm/dt/badwords-filter.svg?maxAge=3600)](https://www.npmjs.com/package/badwords-filter/)
+[![install size](https://packagephobia.now.sh/badge?p=badwords-filter)](https://packagephobia.now.sh/result?p=badwords-filter)
+
+[![NPM](https://nodei.co/npm/badwords-filter.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/badwords-filter/)
+
 # badwords-filter
 
 ## Installation
