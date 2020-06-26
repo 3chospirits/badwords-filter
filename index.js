@@ -4,7 +4,7 @@ class Filter {
 	 * @param {Array} list option to insert your own array of bad words
 	 * @param {Object} config options for the filter
 	 * @param {String} config.cleanWith a character to replace bad words with [default: '*']
-	 * @param {number} config.strictness 0: high, 1: medium, 2:low, 3: off [default: 1]
+	 * @param {number} config.strictness 0: high, 1: medium, 2:low [default: 1]
 	 * @param {boolean} config.useRegex true for enabling regex filtering, false for exact dictionary match *WARNING: large amounts of regex is much slower* [defailt: false]
 	 */
 	constructor(list, config) {
@@ -28,20 +28,20 @@ class Filter {
 				if (e.length < this.minFiltered) this.minFiltered = e.length;
 			});
 
-		this.strictness = config && config.strictness;
+		//this.strictness = config && config.strictness; fur the future
 		this.replacements = new Map([
-			["!", "i"],
-			["@", "a"],
-			["$", "s"],
-			["3", "e"],
-			["8", "b"],
-			["1", "i"],
-			["0", "o"],
-			["4", "h"],
-			["7", "t"],
-			["9", "g"],
-			["6", "b"],
-			["8", "b"],
+			[/!/g, "i"],
+			[/@/g, "a"],
+			[/\$/g, "s"],
+			[/3/g, "e"],
+			[/8/g, "b"],
+			[/1/g, "i"],
+			[/0/g, "o"],
+			[/4/g, "h"],
+			[/7/g, "t"],
+			[/9/g, "g"],
+			[/6/g, "b"],
+			[/8/g, "b"],
 		]);
 	}
 	/**
@@ -54,7 +54,7 @@ class Filter {
 			.toLowerCase()
 			.normalize("NFD")
 			.replace(/[\u0300-\u036f]/g, ""); //removes accented characters
-		this.replacements.forEach((replWith, targ) => (string = string.replace(new RegExp(targ, "g"), replWith)));
+		this.replacements.forEach((replWith, targ) => (string = string.replace(targ, replWith)));
 		return string.replace(/[^a-zA-Z\s]/g, ""); //removes non-alphabetical characters
 	}
     /**
@@ -77,8 +77,10 @@ class Filter {
 			return [w];
 		});
 	}
-	debug() {
-		
+	debug(string) {
+		console.log(`Normalized:\n\t${this.normalize(string)}`);
+		console.log(`isUnclean:\n\t${this.isUnclean(string)}`);
+		console.log(`uncleanWordIndexes:\n\t${this.getUncleanWordIndexes(string)}`);
     }
     /**
      * gets all the indexes of words that are filtered
@@ -86,6 +88,7 @@ class Filter {
      * @returns {Array} indexes of filtered words, empty if none detected
      */
     getUncleanWordIndexes(string){
+		string = this.normalize(string);
         let uncleanIndexes = [];
         let arr = this.getAllCombos(this.normalize(string));
 		for (let i = 0; i < arr.length; i++) 
@@ -112,33 +115,18 @@ class Filter {
      */
 	isWordUnclean(word) {
 		if (this.useRegex) {
-            let unclean = false;
 			this.filter.forEach((r) => {
-				if (r.test(word)) unclean = true;
+				if (r.test(word)) return true;
             });
-            return unclean;
+            return false;
         }
         else
             return this.filter.has(word);
 	}
 }
 module.exports = Filter;
-
-function charSplitter(word) {
-	let arr = [];
-	let chop = word[0];
-	for (let i = 1; i <= word.length; i++)
-		if (chop[0] == word[i]) chop += word[i];
-		else {
-			arr.push(chop);
-			chop = word[i];
-		}
-	return arr;
-}
 function allPossibleCases(arr) {
-	if (arr.length == 1) {
-		return arr[0];
-	}
+	if (arr.length == 1) return arr[0];
 	var result = [];
 	var allCasesOfRest = allPossibleCases(arr.slice(1)); // recur with the rest of array
 	for (var i = 0; i < allCasesOfRest.length; i++)
