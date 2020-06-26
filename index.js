@@ -2,18 +2,18 @@ class Filter {
 	/**
 	 * Constructs filter 
 	 * @param {Array} list option to insert your own array of bad words
-	 * @param config options for the filter
+	 * @param {Object} config options for the filter
 	 * @param {String} config.cleanWith a character to replace bad words with [default: '*']
 	 * @param {number} config.strictness 0: high, 1: medium, 2:low, 3: off [default: 1]
 	 * @param {boolean} config.useRegex true for enabling regex filtering, false for exact dictionary match *WARNING: large amounts of regex is much slower* [defailt: false]
 	 */
 	constructor(list, config) {
 		if (!list) list = require("./filtersets/en.json").filter;
-		this.userRegex = config ? config.userRegex : false;
-		if (this.userRegex) {
+		this.useRegex = config ? config.useRegex : false;
+		if (this.useRegex) {
 			this.filter = new Set(
 				list.map((r) => {
-					new RegExp(r, "g");
+					return new RegExp(r, "g");
 				})
 			);
 		} else {
@@ -22,8 +22,8 @@ class Filter {
 
 		this.config = {};
 		this.cleanWith = config && config.cleanWith ? config.cleanWith : "*";
-		this.minFiltered = this.userRegex ? 0 : this.filter.values().next().value.length; //ADD DEFAULT VALUE FOR DEFAULT LIST
-		if (!this.userRegex)
+		this.minFiltered = this.useRegex ? 0 : this.filter.values().next().value.length; //ADD DEFAULT VALUE FOR DEFAULT LIST
+		if (!this.useRegex)
 			this.filter.forEach((e) => {
 				if (e.length < this.minFiltered) this.minFiltered = e.length;
 			});
@@ -73,13 +73,12 @@ class Filter {
 		return string.split(/ +/g).map((w) => {
 			if (/(.)\1{1,}/.test(w) && w.length > this.minFiltered)
 				//only tests those with at least one double char
-				return allPossibleCases(combos(charSplitter(w)));
+				return allPossibleCases(combos(w));
 			return [w];
 		});
 	}
 	debug() {
-		console.log(this.filter);
-		console.log(this.filter.has("KKK"));
+		
     }
     /**
      * gets all the indexes of words that are filtered
@@ -112,7 +111,7 @@ class Filter {
      * @returns {boolean} Returns true if is filtered word
      */
 	isWordUnclean(word) {
-		if (this.userRegex) {
+		if (this.useRegex) {
             let unclean = false;
 			this.filter.forEach((r) => {
 				if (r.test(word)) unclean = true;
@@ -125,17 +124,6 @@ class Filter {
 }
 module.exports = Filter;
 
-function splitIntoCombos(string) {
-	//return console.log(string.split(/ +/g))//.map(w=>console.log(w + "\n"));
-	return string.split(/ +/g).map((w) => {
-		console.log(w.length);
-		console.log(this.minFiltered);
-		if (/(.)\1{1,}/.test(w) && w.length > this.minFiltered)
-			//only tests those with at least one double char
-			return allPossibleCases(combos(charSplitter(w)));
-		return w;
-	});
-}
 function charSplitter(word) {
 	let arr = [];
 	let chop = word[0];
@@ -157,7 +145,16 @@ function allPossibleCases(arr) {
 		for (var j = 0; j < arr[0].length; j++) result.push(arr[0][j] + allCasesOfRest[i]);
 	return result;
 }
-function combos(val) {
+function combos(word) {
+	let val = [];
+	let chop = word[0];
+	for (let i = 1; i <= word.length; i++)
+		if (chop[0] == word[i]) chop += word[i];
+		else {
+			val.push(chop);
+			chop = word[i];
+		}
+	//return arr;
 	let arr = [];
 	for (let i = 0; i < val.length; i++) {
 		let temp = [];
