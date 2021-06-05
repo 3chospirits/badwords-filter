@@ -9,7 +9,7 @@ let testCases = [
     "and ignores symbols that are not l33t: p.o~r*n",
     "also works with multiple bad words in one sentence or accents: porn and héntai",
 ]
-testCases.forEach((c,num)=>{
+testCases.forEach((c, num) => {
     // num = 1;
     // c = "the filter detects duplicated letters in bad words: ppooooorrrnnnnn";
     console.log("\x1b[4m%s\x1b[0m", `Test Case ${num}`);
