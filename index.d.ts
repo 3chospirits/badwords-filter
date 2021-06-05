@@ -10,19 +10,19 @@ declare class Filter {
      * @param {number} config.strictness 0: high, 1: medium, 2:low [default: 1]
      * @param {boolean} config.useRegex true for enabling regex filtering, false for exact dictionary match *WARNING: large amounts of regex is much slower* [defailt: false]
      */
-    constructor(config: {
+    constructor(config?: {
         list: string[];
-        filter: Array<string | RegExp>;
-        minFiltered: number;
-        cleanWith: string;
-        strictness: number;
-        useRegex: boolean;
+        // filter?: Array<string | RegExp>;
+        // minFiltered?: number;
+        cleanWith?: string;
+        // strictness?: number;
+        useRegex?: boolean;
     });
     useRegex: boolean;
     filter: Set<RegExp> | Set<string>;
     config: {};
     cleanWith: string;
-    minFiltered: any;
+    minFiltered: number;
     replacements: Map<RegExp, string>;
     /**
      * converts to lowercase, replaces accented characters, replaces common symbol/l33t text, removes non-alphabetical characters
