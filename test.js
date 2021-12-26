@@ -8,6 +8,7 @@ let testCases = [
     "also detects l33t attempts to bypass: p0rn",
     "and ignores symbols that are not l33t: p.o~r*n",
     "also works with multiple bad words in one sentence or accents: porn and héntai",
+    "test + test porn test"
 ]
 testCases.forEach((c, num) => {
     // num = 1;
