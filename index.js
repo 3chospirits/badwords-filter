@@ -75,7 +75,17 @@ class Filter {
 		return string
 			.split(/ +/g)
 			.map((w, i) => {
-				if (censorIndexes.has(i)) return this.cleanWith.repeat(w.length)
+				if (censorIndexes.has(i)) {
+					let cleanString = ""
+					if (Array.isArray(this.cleanWith)) {
+						for (let i = 0; i < w.length; i++) {
+							cleanString += this.cleanWith[Math.floor(Math.random() * this.cleanWith.length)];
+						}
+					} else {
+						cleanString = this.cleanWith.repeat(w.length)
+					}
+					return cleanString
+				}
 				return w
 			})
 			.join(" ")

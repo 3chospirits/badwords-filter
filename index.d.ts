@@ -14,7 +14,7 @@ declare class Filter {
         list: string[];
         // filter?: Array<string | RegExp>;
         // minFiltered?: number;
-        cleanWith?: string;
+        cleanWith?: string | string[];
         // strictness?: number;
         useRegex?: boolean;
     });
