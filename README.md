@@ -36,22 +36,22 @@ const filter = new Filter(config);
 
 ## Configuration options for filter
 
-| Property    | Type      | Default           | Description                                              |
-| ----------- | --------- | ----------------- | -------------------------------------------------------- |
-| `list`      | `Array`   | en.json filterset | Array of filters in string format                        |
-| `cleanWith` | `String`  | `"*"`             | Character to replace bad words with in clean function    |
-| `useRegex`  | `boolean` | `false`           | Option to convert strings in `list` to regex expressions |
+| Property    | Type      | Default           | Description                                                               |
+| ----------- | --------- | ----------------- |---------------------------------------------------------------------------|
+| `list`      | `Array`   | en.json filterset | Array of filters in string format                                         |
+| `cleanWith` | `String`  | `"*"`             | Character or array of strings to replace bad words with in clean function |
+| `useRegex`  | `boolean` | `false`           | Option to convert strings in `list` to regex expressions                  |
 
 ## Functions
 
-| Function | Parameters | Returns | Description |
-| --- | --- | --- | --- |
+| Function | Parameters | Returns | Description                                                                                                                                                                     |
+| --- | --- | --- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `normalize` | `String` message to normalize | `String` normalized message | converts to lowercase, normalizes accented characters, converts l33t text to normal text, removes excess non-alphabetical characters _(automatically used in all package functions)_ |
-| `isUnclean` | `String` message to check for cleanliness | `Boolean` true if contains any filtered word | parses message for any filtered words |
-| `clean` | `String` message to clean | `String` cleaned message | replaces all filtered words with `cleanWith` character |
-| `getUncleanWordIndexes` | `String` message to parse | `Array <number>` indexes of words that contain filtered words | gets indexes of all filtered words |
-| `isWordUnclean` | `String` word to check | `Boolean` true if word is detected as a filtered word | checks if a word is filtered |
-| `debug` | `String` message to test | `undefined` | prints to console the outputs of all functions on the given string |
+| `isUnclean` | `String` message to check for cleanliness | `Boolean` true if contains any filtered word | parses message for any filtered words                                                                                                                                           |
+| `clean` | `String` message to clean | `String` cleaned message | replaces all filtered words with `cleanWith` character or a random string                                                                                                       |
+| `getUncleanWordIndexes` | `String` message to parse | `Array <number>` indexes of words that contain filtered words | gets indexes of all filtered words                                                                                                                                              |
+| `isWordUnclean` | `String` word to check | `Boolean` true if word is detected as a filtered word | checks if a word is filtered                                                                                                                                                    |
+| `debug` | `String` message to test | `undefined` | prints to console the outputs of all functions on the given string                                                                                                              |
 
 ## Example Detection
 
